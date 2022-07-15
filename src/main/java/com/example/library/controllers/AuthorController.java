@@ -38,12 +38,6 @@ public class AuthorController {
     }
 
     @Transactional
-    @DeleteMapping("/delete-all") //dal se ovak piše sa -
-    public boolean deleteAll(){ //što vratiti
-        return authorService.deleteAll();
-    }
-
-    @Transactional
     @GetMapping
     public List<AuthorView> readAll(){
         return authorService.readAll().stream().map(x->new AuthorView(x.getAuthorName())).collect(Collectors.toList());

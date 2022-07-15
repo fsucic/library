@@ -18,7 +18,7 @@ public class BookModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false)
     private String bookTitle;
 
     @ManyToOne(optional = false)

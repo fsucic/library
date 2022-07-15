@@ -19,7 +19,7 @@ public class AdminModel {
     private Long id;
 
     @Column(unique = true, nullable = false)
-    private String adminName;
+    private String adminUsername;
 
     @Column(nullable = false)
     @NonNull

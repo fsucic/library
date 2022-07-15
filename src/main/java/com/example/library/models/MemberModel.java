@@ -19,7 +19,7 @@ public class MemberModel {
     private Long id;
 
     @Column(unique = true, nullable = false)
-    private String memberName;
+    private String memberUsername;
 
     @Column(nullable = false)
     @NonNull
