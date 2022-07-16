@@ -13,7 +13,7 @@ import javax.persistence.*;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class LoanRecordModel {
+public class LoanModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -8,9 +8,7 @@ import lombok.NonNull;
 
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -36,14 +34,14 @@ public class MemberModel {
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     @JsonManagedReference
-    private Set<LoanRecordModel> bagOfLoans = new HashSet<>();
+    private Set<LoanModel> bagOfLoans = new HashSet<>();
 
-    public void addLoan(LoanRecordModel loanRecordModel){
-        bagOfLoans.add(loanRecordModel);
+    public void addLoan(LoanModel loanModel){
+        bagOfLoans.add(loanModel);
     }
 
-    public void removeLoan(LoanRecordModel loanRecordModel){
-        bagOfLoans.remove(loanRecordModel);
+    public void removeLoan(LoanModel loanModel){
+        bagOfLoans.remove(loanModel);
     }
 
 }

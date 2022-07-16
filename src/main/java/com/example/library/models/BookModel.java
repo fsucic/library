@@ -36,7 +36,7 @@ public class BookModel {
 
     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
     @JsonManagedReference
-    private Set<LoanRecordModel> bagOfLoans = new HashSet<>();
+    private Set<LoanModel> bagOfLoans = new HashSet<>();
 
     @Override
     public int hashCode() {
@@ -50,12 +50,12 @@ public class BookModel {
         return id != null && id.equals(((BookModel) o).getId());
     }
 
-    public void addLoan(LoanRecordModel loanRecordModel){
-        bagOfLoans.add(loanRecordModel);
+    public void addLoan(LoanModel loanModel){
+        bagOfLoans.add(loanModel);
     }
 
-    public void removeLoan(LoanRecordModel loanRecordModel){
-        bagOfLoans.remove(loanRecordModel);
+    public void removeLoan(LoanModel loanModel){
+        bagOfLoans.remove(loanModel);
     }
 
 }
