@@ -6,4 +6,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface MemberRepository extends CrudRepository<MemberModel, Long> {
+
+    MemberModel findByMemberUsername(String username);
+
 }

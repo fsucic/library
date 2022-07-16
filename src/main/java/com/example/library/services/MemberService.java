@@ -4,6 +4,7 @@ import com.example.library.controllers.requests.MemberRequest;
 import com.example.library.models.MemberModel;
 import com.example.library.repositories.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,8 +14,11 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
 
-    public MemberService(@Autowired MemberRepository memberRepository) {
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    public MemberService(@Autowired MemberRepository memberRepository, @Autowired BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.memberRepository = memberRepository;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
     public MemberModel readOne(long memberId) {
@@ -25,7 +29,7 @@ public class MemberService {
     public MemberModel createMember(MemberRequest memberRequest) {
         MemberModel memberModel = new MemberModel();
         memberModel.setMemberUsername(memberRequest.getMemberUsername());
-        memberModel.setMemberPassword(memberRequest.getMemberPassword());
+        memberModel.setMemberPassword(bCryptPasswordEncoder.encode(memberRequest.getMemberPassword()));
         memberModel.setNumberOfBooksLoaned(0);
         try {
             return memberRepository.save(memberModel);

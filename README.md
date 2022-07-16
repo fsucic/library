@@ -15,11 +15,11 @@ all) on the database "library".
 
 ```
 >> sudo mysql -u root
-mysql> CREATE USER 'your_username'@'localhost' IDENTIFIED BY 'password';
-mysql> GRANT ALL PRIVILEGES ON *.* TO 'your_username'@'localhost' WITH GRANT OPTION;
+mysql> CREATE DATABASE library;
+mysql> CREATE USER your_username@localhost IDENTIFIED BY 'password';
+mysql> GRANT ALL PRIVILEGES ON library.* TO your_username@localhost WITH GRANT OPTION;
 mysql> FLUSH PRIVILEGES;
->> mysql -u 'your_username' -p
-mysql> CREATE DATABASE 'library';
+>> mysql -u your_username -p
 mysql> USE DATABASE library;
 ```
 
@@ -56,3 +56,18 @@ and request classes for more details, the specifics...
 - The main feature I left out is security, there is a branch on the repository called 'security' which you can access
   and is a work in progress...
 - Thank you for your time!
+
+### Authentication and Authorization
+
+The library catalogue is available to the general public, non-registered users can access:
+
+- the list of all books
+- individual book details
+- list of all authors
+- individual autor details
+- search
+- member registration (POST request to "/member")
+
+For other services, member have to login at url "/login" where they will receive a token. This token has to be added to
+HTTP headers as "Bearer". For now there is no distinction between member and admin, but in the future this could be
+achieved bz adding roles or groups.
