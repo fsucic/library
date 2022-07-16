@@ -29,6 +29,9 @@ public class BookService {
     public BookModel createBook(BookRequest bookRequest) { //exceptions
         AuthorModel author = authorService.readOne(bookRequest.getAuthorId());
 
+        if (bookRequest.getCopiesAvailable() < 0){
+            throw new IllegalArgumentException("Cannot create books with less than 0 copies available!");
+        }
         if (author.hasBook(bookRequest.getBookTitle())) {
             throw new IllegalArgumentException("Author already has a book with the same name!");
         }
@@ -73,7 +76,7 @@ public class BookService {
         AuthorModel oldAuthor = bookModel.getAuthor();
         AuthorModel author = authorService.readOne(updateBookRequest.getAuthorId());
 
-        if (author.hasBook(updateBookRequest.getBookTitle())) {
+        if (author.hasBook(updateBookRequest.getBookTitle()) && !oldAuthor.equals(author)) {
             throw new IllegalArgumentException("Author already has a book with the same name!");
         }
 
@@ -84,6 +87,14 @@ public class BookService {
         author.addBook(bookModel);
         try {
             return bookRepository.save(bookModel);
+        } catch (Exception e) {
+            throw new RuntimeException("Interaction with DB unsuccessful!");
+        }
+    }
+
+    public List<BookModel> outOfStock(){
+        try{
+            return bookRepository.findAllByCopiesAvailableEquals(0);
         } catch (Exception e) {
             throw new RuntimeException("Interaction with DB unsuccessful!");
         }

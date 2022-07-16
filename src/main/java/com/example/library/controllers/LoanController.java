@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -52,5 +53,12 @@ public class LoanController {
     @PutMapping
     public LoanView updateLoan(@RequestBody UpdateLoanRequest updateLoanRequest){ //what to return?
         return new LoanView(loanService.updateLoan(updateLoanRequest));
+    }
+
+    @Transactional
+    @GetMapping("/member/{memberId}")
+    public List<LoanView> getMemberLoans(@PathVariable String memberId) {
+        return loanService.getMemberLoans(Long.parseLong(memberId)).stream()
+                .map(x->new LoanView(x)).collect(Collectors.toList());
     }
 }

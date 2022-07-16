@@ -172,4 +172,13 @@ public class LoanService {
         }
     }
 
+    public List<LoanModel> getMemberLoans(long memberId){
+        MemberModel member = memberService.readOne(memberId);
+        try {
+            return loanRepository.findAllByMemberOrderByTimestampDesc(member);
+        } catch (Exception e) {
+            throw new RuntimeException("Interaction with DB unsuccessful!");
+        }
+    }
+
 }

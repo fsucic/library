@@ -7,10 +7,12 @@ import com.example.library.controllers.responses.ViewAuthorView;
 import com.example.library.controllers.responses.BookView;
 import com.example.library.models.BookModel;
 import com.example.library.services.BookService;
+import org.apache.catalina.LifecycleState;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -57,6 +59,12 @@ public class BookController {
     @PutMapping
     public BookView updateBook(@RequestBody UpdateBookRequest updateBookRequest){
         return new BookView(bookService.updateBook(updateBookRequest));
+    }
+
+    @Transactional
+    @GetMapping("/out-of-stock")
+    public List<BookView> outOfStock(){
+        return bookService.outOfStock().stream().map(x->new BookView(x)).collect(Collectors.toList());
     }
 
 }
