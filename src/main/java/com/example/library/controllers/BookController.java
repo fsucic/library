@@ -1,19 +1,14 @@
 package com.example.library.controllers;
 
-import com.example.library.controllers.requests.AuthorRequest;
 import com.example.library.controllers.requests.BookRequest;
-import com.example.library.controllers.responses.AuthorView;
+import com.example.library.controllers.responses.ViewAuthorView;
 import com.example.library.controllers.responses.BookView;
-import com.example.library.models.AuthorModel;
 import com.example.library.models.BookModel;
-import com.example.library.services.AuthorService;
 import com.example.library.services.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/book")
@@ -30,7 +25,7 @@ public class BookController {
     @PostMapping
     public BookView createBook(@RequestBody BookRequest bookRequest){
         BookModel bookModel= bookService.createBook(bookRequest);
-        return new BookView(bookModel.getId(), bookModel.getBookTitle(), new AuthorView(bookModel.getAuthor()),
+        return new BookView(bookModel.getId(), bookModel.getBookTitle(), new ViewAuthorView(bookModel.getAuthor()),
                 bookModel.getCopiesAvailable());
     }
 
