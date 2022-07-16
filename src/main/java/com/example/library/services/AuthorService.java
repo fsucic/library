@@ -59,4 +59,8 @@ public class AuthorService {
             throw new RuntimeException("Interaction with DB unsuccessful!");
         }
     }
+
+    public List<AuthorModel> search(String searchTerm){
+        return authorRepository.findByAuthorNameContainingIgnoreCase(searchTerm);
+    }
 }

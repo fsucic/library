@@ -100,4 +100,12 @@ public class BookService {
         }
     }
 
+    public List<BookModel> search(String searchTerm){
+        try {
+            return bookRepository.findByBookTitleContainingIgnoreCase(searchTerm);
+        } catch (Exception e) {
+            throw new RuntimeException("Interaction with DB unsuccessful!");
+        }
+    }
+
 }
