@@ -30,10 +30,11 @@ public class BookController {
     @PostMapping
     public BookView createBook(@RequestBody BookRequest bookRequest){
         BookModel bookModel= bookService.createBook(bookRequest);
-        return new BookView(bookModel.getBookTitle(), new AuthorView(bookModel.getAuthor().getAuthorName()),
+        return new BookView(bookModel.getId(), bookModel.getBookTitle(), new AuthorView(bookModel.getAuthor()),
                 bookModel.getCopiesAvailable());
     }
 
+    /*
     @Transactional
     @DeleteMapping
     public long deleteBook(@RequestBody BookRequest bookRequest){ //what to return?
@@ -63,5 +64,5 @@ public class BookController {
                 bookModel.getCopiesAvailable());
     }
 
-
+*/
 }

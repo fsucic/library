@@ -27,18 +27,12 @@ public class AuthorService {
         try {
             return authorRepository.save(authorModel);
         } catch (Exception e) {
-            return null;
+            throw e;
         }
     }
 
     public long deleteAuthor(String authorName) { //
-        AuthorModel author = authorRepository.findByAuthorName(authorName);
-        BookModel book = bookRepository.findByAuthor(author);
-        if (book == null) {
-            return authorRepository.deleteByAuthorName(authorName);
-        } else {
-            return -1;
-        }
+        return authorRepository.deleteByAuthorName(authorName);
     }
 
 

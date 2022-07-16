@@ -1,5 +1,6 @@
 package com.example.library.controllers.responses;
 
+import com.example.library.models.AuthorModel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,5 +9,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AuthorView {
+    private long authorId;
     private String authorName;
+
+    public AuthorView(AuthorModel authorModel){
+        this.authorId =authorModel.getId();
+        this.authorName=authorModel.getAuthorName();
+    }
 }

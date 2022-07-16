@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.awt.print.Book;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class BookService {
@@ -25,14 +26,14 @@ public class BookService {
 
 
     public BookModel createBook(BookRequest bookRequest){ //exceptions
-        BookModel bookModel = new BookModel();
-        AuthorModel author = authorRepository.findByAuthorName(bookRequest.getAuthorName());
+        AuthorModel author = authorRepository.findById(bookRequest.getAuthorId());
         if (author!=null){
-            BookModel bookModelExists = bookRepository.findByBookTitleAndAuthor(bookRequest.getBookTitle(), author);
-            if (bookModelExists == null){
+            if (!author.hasBook(bookRequest.getBookTitle())){
+                BookModel bookModel = new BookModel();
                 bookModel.setBookTitle(bookRequest.getBookTitle());
                 bookModel.setAuthor(author);
                 bookModel.setCopiesAvailable(bookRequest.getCopiesAvailable());
+                author.addBook(bookModel);
                 return bookRepository.save(bookModel);
             }
             else {
@@ -45,6 +46,7 @@ public class BookService {
 
     }
 
+    /*
     public long deleteBook(BookRequest bookRequest){ //what to return
         AuthorModel author = authorRepository.findByAuthorName(bookRequest.getAuthorName());
         return bookRepository.deleteByBookTitleAndAuthor(bookRequest.getBookTitle(), author);
@@ -79,5 +81,5 @@ public class BookService {
         return bookRepository.save(book);
 
     }
-
+*/
 }

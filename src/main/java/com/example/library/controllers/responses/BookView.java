@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BookView {
+    private long bookId;
     private String bookTitle;
     private AuthorView author;
     private int copiesAvailable;

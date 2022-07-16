@@ -26,21 +26,23 @@ public class AuthorController {
 
     @Transactional
     @PostMapping
-    public AuthorView createAuthor(@RequestBody AuthorRequest authorRequest){
-        AuthorModel authorModel= authorService.createAuthor(authorRequest.getAuthorName());
-        return new AuthorView(authorModel.getAuthorName());
+    public AuthorView createAuthor(@RequestBody AuthorRequest authorRequest) {
+        AuthorModel authorModel = authorService.createAuthor(authorRequest.getAuthorName());
+        return new AuthorView(authorModel.getId(), authorModel.getAuthorName());
     }
 
     @Transactional
     @DeleteMapping
-    public long deleteAuthor(@RequestBody AuthorRequest authorRequest){ //what to return?
+    public long deleteAuthor(@RequestBody AuthorRequest authorRequest) { //what to return?
         return authorService.deleteAuthor(authorRequest.getAuthorName());
     }
 
     @Transactional
     @GetMapping
-    public List<AuthorView> readAll(){
-        return authorService.readAll().stream().map(x->new AuthorView(x.getAuthorName())).collect(Collectors.toList());
+    public List<AuthorModel> readAll() {
+        return authorService.readAll();
+        //.stream().map(x->new AuthorView(x.getId(),
+        //x.getAuthorName())).collect(Collectors.toList());
     }
 
 }

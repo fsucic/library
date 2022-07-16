@@ -1,6 +1,5 @@
 package com.example.library.controllers.requests;
 
-import com.example.library.controllers.responses.AuthorView;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,9 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class BookRequest {
-    private String bookTitle;
-    private long authorId;
-    private int copiesAvailable;
-
+public class MemberRequest {
+    private String memberUsername;
+    private String memberPassword;
 }
