@@ -4,147 +4,88 @@ import com.example.library.controllers.requests.BookRequest;
 import com.example.library.controllers.requests.UpdateBookRequest;
 import com.example.library.models.AuthorModel;
 import com.example.library.models.BookModel;
-import com.example.library.repositories.AuthorRepository;
 import com.example.library.repositories.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.awt.print.Book;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Service
 public class BookService {
 
     private final BookRepository bookRepository;
-    private final AuthorRepository authorRepository;
+    private final AuthorService authorService;
 
-    public BookService(@Autowired BookRepository bookRepository, @Autowired AuthorRepository authorRepository) {
+    public BookService(@Autowired BookRepository bookRepository, @Autowired AuthorService authorService) {
         this.bookRepository = bookRepository;
-        this.authorRepository=authorRepository;
+        this.authorService = authorService;
     }
 
+    public BookModel readOne(long bookId) {
+        return bookRepository.findById(bookId).orElseThrow(() ->
+                new IllegalArgumentException("No book with that ID"));
+    }
 
-    public BookModel createBook(BookRequest bookRequest){ //exceptions
-        AuthorModel author;
+    public BookModel createBook(BookRequest bookRequest) { //exceptions
+        AuthorModel author = authorService.readOne(bookRequest.getAuthorId());
+
+        if (author.hasBook(bookRequest.getBookTitle())) {
+            throw new IllegalArgumentException("Author already has a book with the same name!");
+        }
+
+        BookModel bookModel = new BookModel();
+        bookModel.setBookTitle(bookRequest.getBookTitle());
+        bookModel.setAuthor(author);
+        bookModel.setCopiesAvailable(bookRequest.getCopiesAvailable());
+        author.addBook(bookModel);
         try {
-            author = authorRepository.findById(bookRequest.getAuthorId());
+            return bookRepository.save(bookModel);
         } catch (Exception e) {
-            throw e;
-        }
-        if (author!=null){
-            if (!author.hasBook(bookRequest.getBookTitle())){
-                BookModel bookModel = new BookModel();
-                bookModel.setBookTitle(bookRequest.getBookTitle());
-                bookModel.setAuthor(author);
-                bookModel.setCopiesAvailable(bookRequest.getCopiesAvailable());
-                author.addBook(bookModel);
-                try{
-                    return bookRepository.save(bookModel);
-                } catch (Exception e) {
-                    throw e;
-                }
-            }
-            else {
-                // author already has book with that title
-                return null;
-            }
-        }
-        else{
-            //throw exe - no author
-            return null;
+            throw new RuntimeException("Interaction with DB unsuccessful!");
         }
     }
 
+    public long deleteBook(long bookId) { //what to return
+        BookModel book = readOne(bookId);
 
-    public long deleteBook(long bookId){ //what to return
-        BookModel book;
-        try {
-            book = bookRepository.findById(bookId);
-        } catch (Exception e){
-            //exception
-            throw e;
-        }
-        if(book==null){
-            return bookId;
-        }
         AuthorModel authorModel = book.getAuthor();
         authorModel.removeBook(book);
         try {
             bookRepository.deleteById(bookId);
-        } catch (Exception e){
+        } catch (Exception e) {
             //exception
-            throw e;
+            throw new RuntimeException("Interaction with DB unsuccessful!");
         }
         return bookId;
     }
 
-
-    public List<BookModel> readAll(){
+    public List<BookModel> readAll() {
         try {
-            return (ArrayList<BookModel>) bookRepository.findAll();
-        }
-        catch (Exception e){
-            return null;
+            return (List<BookModel>) bookRepository.findAll();
+        } catch (Exception e) {
+            throw new RuntimeException("Interaction with DB unsuccessful!");
         }
     }
 
-    public BookModel readOne(long bookId){
-        BookModel bookModel;
-        try {
-            bookModel = bookRepository.findById(bookId);
-        } catch (Exception e) {
-            throw e;
-        }
-        if (bookModel == null){
-            //throw exception
-            return null;
-        }
-        else
-        {
-            return bookModel;
-        }
-    }
+    public BookModel updateBook(UpdateBookRequest updateBookRequest) {
+        BookModel bookModel = readOne(updateBookRequest.getId());
 
-
-    public BookModel updateBook(UpdateBookRequest updateBookRequest){
-        BookModel bookModel;
-        try {
-            bookModel = bookRepository.findById(updateBookRequest.getId());
-        } catch (Exception e) {
-            throw e;
-        }
-
-        if (bookModel == null){
-            //throw exception
-            return null;
-        }
         AuthorModel oldAuthor = bookModel.getAuthor();
-        AuthorModel author;
+        AuthorModel author = authorService.readOne(updateBookRequest.getAuthorId());
 
+        if (author.hasBook(updateBookRequest.getBookTitle())) {
+            throw new IllegalArgumentException("Author already has a book with the same name!");
+        }
+
+        oldAuthor.removeBook(bookModel);
+        bookModel.setBookTitle(updateBookRequest.getBookTitle());
+        bookModel.setAuthor(author);
+        bookModel.setCopiesAvailable(updateBookRequest.getCopiesAvailable());
+        author.addBook(bookModel);
         try {
-            author = authorRepository.findById(updateBookRequest.getAuthorId());
+            return bookRepository.save(bookModel);
         } catch (Exception e) {
-            throw e;
-        }
-        if (author!=null){
-            if (!author.hasBook(updateBookRequest.getBookTitle())){
-                oldAuthor.removeBook(bookModel);
-                bookModel.setBookTitle(updateBookRequest.getBookTitle());
-                bookModel.setAuthor(author);
-                bookModel.setCopiesAvailable(updateBookRequest.getCopiesAvailable());
-                author.addBook(bookModel);
-                return bookModel;
-            }
-            else {
-                // author already has book with that title
-                return null;
-            }
-        }
-        else{
-            //throw exe - no author
-            return null;
+            throw new RuntimeException("Interaction with DB unsuccessful!");
         }
     }
 

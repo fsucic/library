@@ -1,11 +1,7 @@
 package com.example.library.services;
 
 import com.example.library.controllers.requests.MemberRequest;
-import com.example.library.models.AuthorModel;
-import com.example.library.models.BookModel;
 import com.example.library.models.MemberModel;
-import com.example.library.repositories.AuthorRepository;
-import com.example.library.repositories.BookRepository;
 import com.example.library.repositories.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

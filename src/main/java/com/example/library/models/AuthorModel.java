@@ -25,7 +25,7 @@ public class AuthorModel {
     @NonNull
     private String authorName;
 
-    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
     @JsonManagedReference
     private Set<BookModel> bagOfBooks = new HashSet<>();
 

@@ -25,7 +25,7 @@ public class BookModel {
     @Column(nullable = false)
     private String bookTitle;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY,optional = false)
     @JsonBackReference
     @NonNull
     private AuthorModel author;
@@ -34,7 +34,7 @@ public class BookModel {
     @NonNull
     private int copiesAvailable;
 
-    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
     @JsonManagedReference
     private Set<LoanRecordModel> bagOfLoans = new HashSet<>();
 

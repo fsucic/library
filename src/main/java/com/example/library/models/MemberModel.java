@@ -34,7 +34,7 @@ public class MemberModel {
     @NonNull
     private int numberOfBooksLoaned;
 
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     @JsonManagedReference
     private Set<LoanRecordModel> bagOfLoans = new HashSet<>();
 

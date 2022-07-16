@@ -2,13 +2,10 @@ package com.example.library.services;
 
 import com.example.library.controllers.requests.UpdateAuthorRequest;
 import com.example.library.models.AuthorModel;
-import com.example.library.models.BookModel;
 import com.example.library.repositories.AuthorRepository;
-import com.example.library.repositories.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -20,13 +17,18 @@ public class AuthorService {
         this.authorRepository = authorRepository;
     }
 
+    public AuthorModel readOne(long authorId){
+        return authorRepository.findById(authorId).orElseThrow(() ->
+                new IllegalArgumentException("No author with that ID!"));
+    }
+
     public AuthorModel createAuthor(String authorName) {
         AuthorModel authorModel = new AuthorModel();
         authorModel.setAuthorName(authorName);
         try {
             return authorRepository.save(authorModel);
         } catch (Exception e) {
-            throw e;
+            throw new RuntimeException("Interaction with DB unsuccessful!");
         }
     }
 
@@ -35,51 +37,26 @@ public class AuthorService {
             authorRepository.deleteById(authorId);
             return authorId;
         } catch (Exception e) {
-            throw e;
+            throw new RuntimeException("Interaction with DB unsuccessful!");
         }
     }
 
 
     public List<AuthorModel> readAll() {
         try {
-            return (ArrayList<AuthorModel>) authorRepository.findAll();
+            return (List<AuthorModel>) authorRepository.findAll();
         } catch (Exception e) {
-            throw e;
-        }
-    }
-
-    public AuthorModel readOne(long authorId){
-        AuthorModel authorModel;
-        try {
-            authorModel = authorRepository.findById(authorId);
-        } catch (Exception e) {
-            throw e;
-        }
-        if (authorModel == null){
-            //throw exception
-            return null;
-        }
-        else
-        {
-            return authorModel;
+            throw new RuntimeException("Interaction with DB unsuccessful!");
         }
     }
 
     public AuthorModel updateAuthor(UpdateAuthorRequest updateAuthorRequest){
-        AuthorModel authorModel;
+        AuthorModel authorModel = readOne(updateAuthorRequest.getId());
+        authorModel.setAuthorName(updateAuthorRequest.getAuthorName());
         try {
-            authorModel = authorRepository.findById(updateAuthorRequest.getId());
+            return authorRepository.save(authorModel);
         } catch (Exception e) {
-            throw e;
-        }
-        if (authorModel == null){
-            //throw exception
-            return null;
-        }
-        else
-        {
-            authorModel.setAuthorName(updateAuthorRequest.getAuthorName());
-            return authorModel;
+            throw new RuntimeException("Interaction with DB unsuccessful!");
         }
     }
 }
