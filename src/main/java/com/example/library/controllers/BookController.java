@@ -1,6 +1,8 @@
 package com.example.library.controllers;
 
 import com.example.library.controllers.requests.BookRequest;
+import com.example.library.controllers.requests.UpdateBookRequest;
+import com.example.library.controllers.responses.AuthorView;
 import com.example.library.controllers.responses.ViewAuthorView;
 import com.example.library.controllers.responses.BookView;
 import com.example.library.models.BookModel;
@@ -9,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/book")
@@ -25,39 +29,34 @@ public class BookController {
     @PostMapping
     public BookView createBook(@RequestBody BookRequest bookRequest){
         BookModel bookModel= bookService.createBook(bookRequest);
-        return new BookView(bookModel.getId(), bookModel.getBookTitle(), new ViewAuthorView(bookModel.getAuthor()),
-                bookModel.getCopiesAvailable());
+        return new BookView(bookModel);
     }
 
-    /*
-    @Transactional
-    @DeleteMapping
-    public long deleteBook(@RequestBody BookRequest bookRequest){ //what to return?
-        return bookService.deleteBook(bookRequest);
-    }
 
     @Transactional
-    @DeleteMapping("/delete-all") //dal se ovak piše sa -
-    public boolean deleteAll(){ //što vratiti
-        return bookService.deleteAll();
+    @DeleteMapping("/{bookId}")
+    public long deleteBook(@PathVariable String bookId){ //what to return?
+        return bookService.deleteBook(Long.parseLong(bookId));
     }
 
 
     @Transactional
     @GetMapping
-    public List<BookView> readAll(){
-        return bookService.readAll().stream().map(x->new BookView(x.getBookTitle(),
-                new AuthorView(x.getAuthor().getAuthorName()),
-                x.getCopiesAvailable())).collect(Collectors.toList());
+    public Set<BookView> readAll(){
+        return bookService.readAll().stream().map(x->new BookView(x)).collect(Collectors.toSet());
     }
 
     @Transactional
-    @PutMapping
-    public BookView updateBookCopiesAvailable(@RequestBody BookRequest bookRequest){
-        BookModel bookModel= bookService.updateBookCopiesAvailable(bookRequest);
-        return new BookView(bookModel.getBookTitle(), new AuthorView(bookModel.getAuthor().getAuthorName()),
-                bookModel.getCopiesAvailable());
+    @GetMapping("/{bookId}")
+    public BookView readOne(@PathVariable String bookId) {
+        return new BookView(bookService.readOne(Long.parseLong(bookId)));
     }
 
-*/
+
+    @Transactional
+    @PutMapping
+    public BookView updateBook(@RequestBody UpdateBookRequest updateBookRequest){
+        return new BookView(bookService.updateBook(updateBookRequest));
+    }
+
 }

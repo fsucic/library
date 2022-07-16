@@ -1,6 +1,7 @@
 package com.example.library.services;
 
 import com.example.library.controllers.requests.BookRequest;
+import com.example.library.controllers.requests.UpdateBookRequest;
 import com.example.library.models.AuthorModel;
 import com.example.library.models.BookModel;
 import com.example.library.repositories.AuthorRepository;
@@ -26,7 +27,12 @@ public class BookService {
 
 
     public BookModel createBook(BookRequest bookRequest){ //exceptions
-        AuthorModel author = authorRepository.findById(bookRequest.getAuthorId());
+        AuthorModel author;
+        try {
+            author = authorRepository.findById(bookRequest.getAuthorId());
+        } catch (Exception e) {
+            throw e;
+        }
         if (author!=null){
             if (!author.hasBook(bookRequest.getBookTitle())){
                 BookModel bookModel = new BookModel();
@@ -34,34 +40,46 @@ public class BookService {
                 bookModel.setAuthor(author);
                 bookModel.setCopiesAvailable(bookRequest.getCopiesAvailable());
                 author.addBook(bookModel);
-                return bookRepository.save(bookModel);
+                try{
+                    return bookRepository.save(bookModel);
+                } catch (Exception e) {
+                    throw e;
+                }
             }
             else {
+                // author already has book with that title
                 return null;
             }
         }
         else{
+            //throw exe - no author
             return null;
         }
-
-    }
-
-    /*
-    public long deleteBook(BookRequest bookRequest){ //what to return
-        AuthorModel author = authorRepository.findByAuthorName(bookRequest.getAuthorName());
-        return bookRepository.deleteByBookTitleAndAuthor(bookRequest.getBookTitle(), author);
     }
 
 
-    public boolean deleteAll(){ //kako handleati try catch
+    public long deleteBook(long bookId){ //what to return
+        BookModel book;
         try {
-            bookRepository.deleteAll();
-            return true;
+            book = bookRepository.findById(bookId);
+        } catch (Exception e){
+            //exception
+            throw e;
         }
-        catch (Exception e){
-            return false;
+        if(book==null){
+            return bookId;
         }
+        AuthorModel authorModel = book.getAuthor();
+        authorModel.removeBook(book);
+        try {
+            bookRepository.deleteById(bookId);
+        } catch (Exception e){
+            //exception
+            throw e;
+        }
+        return bookId;
     }
+
 
     public List<BookModel> readAll(){
         try {
@@ -72,14 +90,62 @@ public class BookService {
         }
     }
 
-    public BookModel updateBookCopiesAvailable(BookRequest bookRequest){
-        AuthorModel author = authorRepository.findByAuthorName(bookRequest.getAuthorName());
-        BookModel book = bookRepository.findByBookTitleAndAuthor(bookRequest.getBookTitle(), author);
-        if (book != null){
-            book.setCopiesAvailable(bookRequest.getCopiesAvailable());
+    public BookModel readOne(long bookId){
+        BookModel bookModel;
+        try {
+            bookModel = bookRepository.findById(bookId);
+        } catch (Exception e) {
+            throw e;
         }
-        return bookRepository.save(book);
-
+        if (bookModel == null){
+            //throw exception
+            return null;
+        }
+        else
+        {
+            return bookModel;
+        }
     }
-*/
+
+
+    public BookModel updateBook(UpdateBookRequest updateBookRequest){
+        BookModel bookModel;
+        try {
+            bookModel = bookRepository.findById(updateBookRequest.getId());
+        } catch (Exception e) {
+            throw e;
+        }
+
+        if (bookModel == null){
+            //throw exception
+            return null;
+        }
+        AuthorModel oldAuthor = bookModel.getAuthor();
+        AuthorModel author;
+
+        try {
+            author = authorRepository.findById(updateBookRequest.getAuthorId());
+        } catch (Exception e) {
+            throw e;
+        }
+        if (author!=null){
+            if (!author.hasBook(updateBookRequest.getBookTitle())){
+                oldAuthor.removeBook(bookModel);
+                bookModel.setBookTitle(updateBookRequest.getBookTitle());
+                bookModel.setAuthor(author);
+                bookModel.setCopiesAvailable(updateBookRequest.getCopiesAvailable());
+                author.addBook(bookModel);
+                return bookModel;
+            }
+            else {
+                // author already has book with that title
+                return null;
+            }
+        }
+        else{
+            //throw exe - no author
+            return null;
+        }
+    }
+
 }

@@ -6,6 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface AuthorRepository extends CrudRepository<AuthorModel, Long> {
-    long deleteById(long id);
     AuthorModel findById(long id);
 }

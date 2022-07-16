@@ -15,11 +15,9 @@ import java.util.List;
 public class AuthorService {
 
     private final AuthorRepository authorRepository;
-    private final BookRepository bookRepository;
 
-    public AuthorService(@Autowired AuthorRepository authorRepository, @Autowired BookRepository bookRepository) {
+    public AuthorService(@Autowired AuthorRepository authorRepository) {
         this.authorRepository = authorRepository;
-        this.bookRepository = bookRepository;
     }
 
     public AuthorModel createAuthor(String authorName) {
@@ -34,7 +32,8 @@ public class AuthorService {
 
     public long deleteAuthor(long authorId) {
         try {
-            return authorRepository.deleteById(authorId);
+            authorRepository.deleteById(authorId);
+            return authorId;
         } catch (Exception e) {
             throw e;
         }
