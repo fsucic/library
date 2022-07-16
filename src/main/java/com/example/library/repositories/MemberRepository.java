@@ -6,5 +6,4 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface MemberRepository extends CrudRepository<MemberModel, Long> {
-    long deleteByMemberUsername(String memberUsername);
 }

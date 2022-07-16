@@ -1,6 +1,7 @@
 package com.example.library.services;
 
 import com.example.library.controllers.requests.MemberRequest;
+import com.example.library.models.AuthorModel;
 import com.example.library.models.MemberModel;
 import com.example.library.repositories.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,10 @@ public class MemberService {
         this.memberRepository = memberRepository;
     }
 
+    public MemberModel readOne(long memberId){
+        return memberRepository.findById(memberId).orElseThrow(() ->
+                new IllegalArgumentException("No member with that ID!"));
+    }
 
     public MemberModel createMember(MemberRequest memberRequest) {
         MemberModel memberModel = new MemberModel();
@@ -27,20 +32,26 @@ public class MemberService {
         try {
             return memberRepository.save(memberModel);
         } catch (Exception e) {
-            return null;
+            throw new RuntimeException("Interaction with DB unsuccessful!");
         }
     }
 
-    public long deleteMember(MemberRequest memberRequest) { //
-        return memberRepository.deleteByMemberUsername(memberRequest.getMemberUsername());
-    }
 
+    public long deleteMember(long memberId) {
+        try {
+            memberRepository.deleteById(memberId);
+            return memberId;
+        } catch (Exception e) {
+            throw new RuntimeException("Interaction with DB unsuccessful!");
+        }
+    }
 
     public List<MemberModel> readAll() {
         try {
-            return (ArrayList<MemberModel>) memberRepository.findAll();
+            return (List<MemberModel>) memberRepository.findAll();
         } catch (Exception e) {
-            return null;
+            throw new RuntimeException("Interaction with DB unsuccessful!");
         }
     }
+
 }

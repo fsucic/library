@@ -1,18 +1,13 @@
 package com.example.library.controllers;
 
-import com.example.library.controllers.requests.AuthorRequest;
 import com.example.library.controllers.requests.MemberRequest;
-import com.example.library.controllers.responses.AuthorView;
 import com.example.library.controllers.responses.MemberView;
-import com.example.library.models.AuthorModel;
-import com.example.library.models.MemberModel;
-import com.example.library.services.AuthorService;
 import com.example.library.services.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
-import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
@@ -28,25 +23,28 @@ public class MemberController {
 
     @Transactional
     @PostMapping
-    public MemberView createMember(@RequestBody MemberRequest memberRequest){
-        MemberModel memberModel= memberService.createMember(memberRequest);
-        return new MemberView(memberModel.getMemberUsername(), memberModel.getNumberOfBooksLoaned());
+    public MemberView createMember(@RequestBody MemberRequest memberRequest) {
+        return new MemberView(memberService.createMember(memberRequest));
     }
 
 
+    @Transactional
+    @DeleteMapping("/{memberId}")
+    public long deleteMember(@PathVariable String memberId) { //what to return?
+        return memberService.deleteMember(Long.parseLong(memberId));
+    }
 
     @Transactional
-    @DeleteMapping
-    public long deleteMember(@RequestBody MemberRequest memberRequest){ //what to return?
-        return memberService.deleteMember(memberRequest);
+    @GetMapping("/{memberId}")
+    public MemberView readOne(@PathVariable String memberId) {
+        return new MemberView(memberService.readOne(Long.parseLong(memberId)));
     }
 
 
     @Transactional
     @GetMapping
-    public List<MemberView> readAll(){
-        return memberService.readAll().stream().map(x->new MemberView(x.getMemberUsername(),
-                x.getNumberOfBooksLoaned())).collect(Collectors.toList());
+    public Set<MemberView> readAll() {
+        return memberService.readAll().stream().map(x->new MemberView(x)).collect(Collectors.toSet());
     }
 
 
