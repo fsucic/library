@@ -11,5 +11,6 @@ import java.util.List;
 @Repository
 public interface LoanRepository extends CrudRepository<LoanModel, Long> {
     long countByBookAndMember(BookModel book, MemberModel memberModel);
+
     List<LoanModel> findAllByMemberOrderByTimestampDesc(MemberModel memberModel);
 }

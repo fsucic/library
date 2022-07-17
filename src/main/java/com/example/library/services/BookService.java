@@ -29,7 +29,7 @@ public class BookService {
     public BookModel createBook(BookRequest bookRequest) { //exceptions
         AuthorModel author = authorService.readOne(bookRequest.getAuthorId());
 
-        if (bookRequest.getCopiesAvailable() < 0){
+        if (bookRequest.getCopiesAvailable() < 0) {
             throw new IllegalArgumentException("Cannot create books with less than 0 copies available!");
         }
         if (author.hasBook(bookRequest.getBookTitle())) {
@@ -92,15 +92,15 @@ public class BookService {
         }
     }
 
-    public List<BookModel> outOfStock(){
-        try{
+    public List<BookModel> outOfStock() {
+        try {
             return bookRepository.findAllByCopiesAvailableEquals(0);
         } catch (Exception e) {
             throw new RuntimeException("Interaction with DB unsuccessful!");
         }
     }
 
-    public List<BookModel> search(String searchTerm){
+    public List<BookModel> search(String searchTerm) {
         try {
             return bookRepository.findByBookTitleContainingIgnoreCase(searchTerm);
         } catch (Exception e) {

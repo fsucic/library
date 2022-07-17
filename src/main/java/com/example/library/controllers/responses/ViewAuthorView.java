@@ -12,7 +12,7 @@ public class ViewAuthorView {
     private long authorId;
     private String authorName;
 
-    public ViewAuthorView(AuthorModel authorModel){
+    public ViewAuthorView(AuthorModel authorModel) {
         this.authorId = authorModel.getId();
         this.authorName = authorModel.getAuthorName();
     }

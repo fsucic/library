@@ -25,8 +25,8 @@ public class LoanController {
 
     @Transactional
     @PostMapping
-    public LoanView createLoan(@RequestBody LoanRequest loanRequest){
-        LoanModel loanModel= loanService.createLoan(loanRequest);
+    public LoanView createLoan(@RequestBody LoanRequest loanRequest) {
+        LoanModel loanModel = loanService.createLoan(loanRequest);
         return new LoanView(loanModel);
     }
 
@@ -38,20 +38,20 @@ public class LoanController {
 
     @Transactional
     @GetMapping
-    public Set<LoanView> readAll(){
-        return loanService.readAll().stream().map(x->new LoanView(x)).collect(Collectors.toSet());
+    public Set<LoanView> readAll() {
+        return loanService.readAll().stream().map(LoanView::new).collect(Collectors.toSet());
     }
 
 
     @Transactional
     @DeleteMapping("/{loanId}")
-    public long deleteLoan(@PathVariable String loanId){ //what to return?
+    public long deleteLoan(@PathVariable String loanId) { //what to return?
         return loanService.deleteLoan(Long.parseLong(loanId));
     }
 
     @Transactional
     @PutMapping
-    public LoanView updateLoan(@RequestBody UpdateLoanRequest updateLoanRequest){ //what to return?
+    public LoanView updateLoan(@RequestBody UpdateLoanRequest updateLoanRequest) { //what to return?
         return new LoanView(loanService.updateLoan(updateLoanRequest));
     }
 
@@ -59,6 +59,6 @@ public class LoanController {
     @GetMapping("/member/{memberId}")
     public List<LoanView> getMemberLoans(@PathVariable String memberId) {
         return loanService.getMemberLoans(Long.parseLong(memberId)).stream()
-                .map(x->new LoanView(x)).collect(Collectors.toList());
+                .map(LoanView::new).collect(Collectors.toList());
     }
 }

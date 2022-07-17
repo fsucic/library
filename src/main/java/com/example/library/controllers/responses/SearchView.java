@@ -21,7 +21,7 @@ public class SearchView {
         this.authorName = authorModel.getAuthorName();
     }
 
-    public SearchView(BookModel bookModel){
+    public SearchView(BookModel bookModel) {
         this.bookId = bookModel.getId();
         this.bookTitle = bookModel.getBookTitle();
     }

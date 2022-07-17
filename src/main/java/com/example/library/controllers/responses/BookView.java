@@ -15,10 +15,10 @@ public class BookView {
     private ViewAuthorView author;
     private int copiesAvailable;
 
-    public BookView(BookModel bookModel){
+    public BookView(BookModel bookModel) {
         this.bookId = bookModel.getId();
         this.bookTitle = bookModel.getBookTitle();
-        this.copiesAvailable=bookModel.getCopiesAvailable();
+        this.copiesAvailable = bookModel.getCopiesAvailable();
         this.author = new ViewAuthorView(bookModel.getAuthor());
     }
 }

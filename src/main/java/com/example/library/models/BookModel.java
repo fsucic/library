@@ -7,7 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
-
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -25,7 +24,7 @@ public class BookModel {
     @Column(nullable = false)
     private String bookTitle;
 
-    @ManyToOne(fetch = FetchType.LAZY,optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JsonBackReference
     @NonNull
     private AuthorModel author;
@@ -46,15 +45,15 @@ public class BookModel {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof BookModel )) return false;
+        if (!(o instanceof BookModel)) return false;
         return id != null && id.equals(((BookModel) o).getId());
     }
 
-    public void addLoan(LoanModel loanModel){
+    public void addLoan(LoanModel loanModel) {
         bagOfLoans.add(loanModel);
     }
 
-    public void removeLoan(LoanModel loanModel){
+    public void removeLoan(LoanModel loanModel) {
         bagOfLoans.remove(loanModel);
     }
 
