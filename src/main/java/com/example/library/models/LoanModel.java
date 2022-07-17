@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
-
 import javax.persistence.*;
 
 @Entity
@@ -44,7 +43,7 @@ public class LoanModel {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof BookModel )) return false;
+        if (!(o instanceof BookModel)) return false;
         return id != null && id.equals(((BookModel) o).getId());
     }
 

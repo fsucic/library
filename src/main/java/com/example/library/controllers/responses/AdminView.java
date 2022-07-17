@@ -1,7 +1,6 @@
 package com.example.library.controllers.responses;
 
 import com.example.library.models.AdminModel;
-import com.example.library.models.MemberModel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,7 +13,7 @@ public class AdminView {
     private String adminUsername;
 
     public AdminView(AdminModel adminModel) {
-        this.adminId=adminModel.getId();
-        this.adminUsername=adminModel.getAdminUsername();
+        this.adminId = adminModel.getId();
+        this.adminUsername = adminModel.getAdminUsername();
     }
 }

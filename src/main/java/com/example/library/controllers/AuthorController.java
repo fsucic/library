@@ -6,13 +6,9 @@ import com.example.library.controllers.responses.AuthorView;
 import com.example.library.models.AuthorModel;
 import com.example.library.services.AuthorService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -42,7 +38,7 @@ public class AuthorController {
     @Transactional
     @GetMapping
     public Set<AuthorView> readAll() {
-        return authorService.readAll().stream().map(x->new AuthorView(x)).collect(Collectors.toSet());
+        return authorService.readAll().stream().map(AuthorView::new).collect(Collectors.toSet());
     }
 
     @Transactional
@@ -53,7 +49,7 @@ public class AuthorController {
 
     @Transactional
     @PutMapping
-    public AuthorView updateAuthor(@RequestBody UpdateAuthorRequest updateAuthorRequest){
+    public AuthorView updateAuthor(@RequestBody UpdateAuthorRequest updateAuthorRequest) {
         return new AuthorView(authorService.updateAuthor(updateAuthorRequest));
     }
 }

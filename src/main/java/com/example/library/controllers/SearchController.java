@@ -1,6 +1,5 @@
 package com.example.library.controllers;
 
-import com.example.library.controllers.responses.AuthorView;
 import com.example.library.controllers.responses.SearchView;
 import com.example.library.models.AuthorModel;
 import com.example.library.models.BookModel;
@@ -23,18 +22,18 @@ public class SearchController {
     private final AuthorService authorService;
     private final BookService bookService;
 
-    public SearchController(@Autowired AuthorService authorService, @Autowired BookService bookService ){
-        this.authorService=authorService;
-        this.bookService=bookService;
+    public SearchController(@Autowired AuthorService authorService, @Autowired BookService bookService) {
+        this.authorService = authorService;
+        this.bookService = bookService;
     }
 
     @Transactional
     @GetMapping("/{searchTerm}")
-    public List<SearchView> search(@PathVariable String searchTerm){
+    public List<SearchView> search(@PathVariable String searchTerm) {
         List<AuthorModel> authors = authorService.search(searchTerm);
-        List<SearchView> searchResult = authors.stream().map(x->new SearchView(x)).collect(Collectors.toList());
+        List<SearchView> searchResult = authors.stream().map(SearchView::new).collect(Collectors.toList());
         List<BookModel> books = bookService.search(searchTerm);
-        for (BookModel book:books) {
+        for (BookModel book : books) {
             searchResult.add(new SearchView(book));
         }
         return searchResult;

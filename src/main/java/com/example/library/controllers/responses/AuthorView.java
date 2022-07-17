@@ -16,10 +16,10 @@ public class AuthorView {
     private String authorName;
     private Set<ViewBookView> bagOfBooks;
 
-    public AuthorView(AuthorModel authorModel){
-        this.authorId =authorModel.getId();
-        this.authorName=authorModel.getAuthorName();
-        this.bagOfBooks = authorModel.getBagOfBooks().stream().map(x->new ViewBookView(x.getId(), x.getBookTitle(),
+    public AuthorView(AuthorModel authorModel) {
+        this.authorId = authorModel.getId();
+        this.authorName = authorModel.getAuthorName();
+        this.bagOfBooks = authorModel.getBagOfBooks().stream().map(x -> new ViewBookView(x.getId(), x.getBookTitle(),
                 x.getCopiesAvailable())).collect(Collectors.toSet());
     }
 }

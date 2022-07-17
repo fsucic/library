@@ -25,6 +25,6 @@ public class LoanView {
         this.timestamp = loanModel.getTimestamp();
         this.bookTitle = loanModel.getBook().getBookTitle();
         this.memberUsername = loanModel.getMember().getMemberUsername();
-        this.loanId=loanModel.getId();
+        this.loanId = loanModel.getId();
     }
 }

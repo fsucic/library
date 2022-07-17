@@ -10,8 +10,8 @@ import com.example.library.repositories.LoanRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -33,13 +33,13 @@ public class LoanService {
         MemberModel member = memberService.readOne(loanRequest.getMemberId());
 
         if (loanRequest.getLoanOption().equals(LoanOption.RETURN)) {
-            if(!doesMemberHaveBook(book, member)){
+            if (!doesMemberHaveBook(book, member)) {
                 throw new IllegalArgumentException("Member does not have that book!");
             }
             member.setNumberOfBooksLoaned(member.getNumberOfBooksLoaned() - 1);
             book.setCopiesAvailable(book.getCopiesAvailable() + 1);
         } else {
-            if(doesMemberHaveBook(book, member)){
+            if (doesMemberHaveBook(book, member)) {
                 throw new IllegalArgumentException("Member already has that book!");
             }
             if (member.getNumberOfBooksLoaned() > 2) {
@@ -67,12 +67,11 @@ public class LoanService {
         }
     }
 
-    private boolean doesMemberHaveBook(BookModel bookModel, MemberModel memberModel){
+    private boolean doesMemberHaveBook(BookModel bookModel, MemberModel memberModel) {
         long loansForBookAndMember;
-        try{
-            loansForBookAndMember= loanRepository.countByBookAndMember(bookModel,memberModel);
-        }
-        catch (Exception e){
+        try {
+            loansForBookAndMember = loanRepository.countByBookAndMember(bookModel, memberModel);
+        } catch (Exception e) {
             throw new RuntimeException("Interaction with DB unsuccessful!");
         }
         return loansForBookAndMember % 2 != 0;
@@ -97,11 +96,10 @@ public class LoanService {
         MemberModel member = loan.getMember();
         book.removeLoan(loan);
         member.removeLoan(loan);
-        if (loan.getLoanOption().equals(LoanOption.LOAN)){
+        if (loan.getLoanOption().equals(LoanOption.LOAN)) {
             member.setNumberOfBooksLoaned(member.getNumberOfBooksLoaned() - 1);
             book.setCopiesAvailable(book.getCopiesAvailable() + 1);
-        }
-        else{
+        } else {
             member.setNumberOfBooksLoaned(member.getNumberOfBooksLoaned() + 1);
             book.setCopiesAvailable(book.getCopiesAvailable() - 1);
         }
@@ -123,19 +121,19 @@ public class LoanService {
         BookModel newBook = bookService.readOne(updateLoanRequest.getBookId());
         MemberModel newMember = memberService.readOne(updateLoanRequest.getMemberId());
 
-        if(newBook.equals(oldBook) || newMember.equals(oldMember)){
+        if (newBook.equals(oldBook) || newMember.equals(oldMember)) {
             throw new IllegalArgumentException("CANNOT UPDATE WITH SAME MEMBER OR SAME BOOK - delete and make " +
                     "new loan request");
         }
 
         if (updateLoanRequest.getLoanOption().equals(LoanOption.RETURN)) {
-            if(!doesMemberHaveBook(newBook, newMember)){
+            if (!doesMemberHaveBook(newBook, newMember)) {
                 throw new IllegalArgumentException("Member Does Not Have that Book");
             }
             newMember.setNumberOfBooksLoaned(newMember.getNumberOfBooksLoaned() - 1);
             newBook.setCopiesAvailable(newBook.getCopiesAvailable() + 1);
         } else {
-            if(doesMemberHaveBook(newBook, newMember)){
+            if (doesMemberHaveBook(newBook, newMember)) {
                 throw new IllegalArgumentException("Member Already Has that book!");
             }
             if (newMember.getNumberOfBooksLoaned() > 2) {
@@ -148,11 +146,10 @@ public class LoanService {
             newBook.setCopiesAvailable(newBook.getCopiesAvailable() - 1);
         }
 
-        if (loanModel.getLoanOption().equals(LoanOption.LOAN)){
+        if (loanModel.getLoanOption().equals(LoanOption.LOAN)) {
             oldMember.setNumberOfBooksLoaned(oldMember.getNumberOfBooksLoaned() - 1);
             oldBook.setCopiesAvailable(oldBook.getCopiesAvailable() + 1);
-        }
-        else {
+        } else {
             oldMember.setNumberOfBooksLoaned(oldMember.getNumberOfBooksLoaned() + 1);
             oldBook.setCopiesAvailable(oldBook.getCopiesAvailable() - 1);
         }
@@ -172,7 +169,7 @@ public class LoanService {
         }
     }
 
-    public List<LoanModel> getMemberLoans(long memberId){
+    public List<LoanModel> getMemberLoans(long memberId) {
         MemberModel member = memberService.readOne(memberId);
         try {
             return loanRepository.findAllByMemberOrderByTimestampDesc(member);

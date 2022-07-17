@@ -17,7 +17,7 @@ public class AuthorService {
         this.authorRepository = authorRepository;
     }
 
-    public AuthorModel readOne(long authorId){
+    public AuthorModel readOne(long authorId) {
         return authorRepository.findById(authorId).orElseThrow(() ->
                 new IllegalArgumentException("No author with that ID!"));
     }
@@ -50,7 +50,7 @@ public class AuthorService {
         }
     }
 
-    public AuthorModel updateAuthor(UpdateAuthorRequest updateAuthorRequest){
+    public AuthorModel updateAuthor(UpdateAuthorRequest updateAuthorRequest) {
         AuthorModel authorModel = readOne(updateAuthorRequest.getId());
         authorModel.setAuthorName(updateAuthorRequest.getAuthorName());
         try {
@@ -60,7 +60,7 @@ public class AuthorService {
         }
     }
 
-    public List<AuthorModel> search(String searchTerm){
+    public List<AuthorModel> search(String searchTerm) {
         return authorRepository.findByAuthorNameContainingIgnoreCase(searchTerm);
     }
 }

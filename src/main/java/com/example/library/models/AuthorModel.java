@@ -29,17 +29,17 @@ public class AuthorModel {
     @JsonManagedReference
     private Set<BookModel> bagOfBooks = new HashSet<>();
 
-    public void addBook(BookModel bookModel){
+    public void addBook(BookModel bookModel) {
         bagOfBooks.add(bookModel);
     }
 
-    public void removeBook(BookModel bookModel){
+    public void removeBook(BookModel bookModel) {
         bagOfBooks.remove(bookModel);
     }
 
-    public boolean hasBook(String bookName){
-        for (BookModel book: bagOfBooks) {
-            if (book.getBookTitle().equals(bookName)){
+    public boolean hasBook(String bookName) {
+        for (BookModel book : bagOfBooks) {
+            if (book.getBookTitle().equals(bookName)) {
                 return true;
             }
         }

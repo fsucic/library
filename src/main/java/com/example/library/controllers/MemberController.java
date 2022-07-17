@@ -44,7 +44,7 @@ public class MemberController {
     @Transactional
     @GetMapping
     public Set<MemberView> readAll() {
-        return memberService.readAll().stream().map(x->new MemberView(x)).collect(Collectors.toSet());
+        return memberService.readAll().stream().map(MemberView::new).collect(Collectors.toSet());
     }
 
 
